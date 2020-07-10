@@ -11,85 +11,68 @@ const {validate, joi} = require('../middlewares/validation');
 function questionsRoutes(app) {
     const questionsTemplate = hb.compile(fs.readFileSync(path.join(__dirname, '../templates/questions.hbs'), 'utf8'));
 
-    app.get('/questions', validate({query: joi.object({date: joi.string().pattern(/^[0-1][0-9]-[0-9]{4}$/)})}), (req, res, next) => {
+    app.get('/questions', validate({query: joi.object({date: joi.string().pattern(/^[0-1][0-9]-[0-9]{4}$/)})}), async (req, res, next) => {
+        const dbQuery = {'answer': {$ne: null}};
 
-        MongoClient.connect(process.env.MONGO_URL, (err, client) => {
-            if (err) {
-                res.sendStatus(500);
-                return next(err);
-            }
+        if (req.query.date) {
+            const month = parseInt(req.query.date.substring(0, 2));
+            const year = parseInt(req.query.date.substring(3));
 
-            const dbQuery = {'answer': {$ne: null}};
+            const monthStart = new Date(Date.UTC(year, month - 1));
+            const nextMonthStart = new Date(Date.UTC(year, month));
+            dbQuery['timestamp'] = {$gte: monthStart.getTime(), $lt: nextMonthStart.getTime()};
+        }
 
-            if (req.query.date) {
-                const month = parseInt(req.query.date.substring(0, 2));
-                const year = parseInt(req.query.date.substring(3));
+        try {
+            const client = await MongoClient.connect(process.env.MONGO_URL);
 
-                const monthStart = new Date(Date.UTC(year, month - 1));
-                const nextMonthStart = new Date(Date.UTC(year, month));
-                dbQuery['timestamp'] = {$gte: monthStart.getTime(), $lt: nextMonthStart.getTime()};
-            }
+            const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).limit(100).toArray();
 
-            client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).limit(100).toArray((err, result) => {
-                if (err) {
-                    res.sendStatus(500);
-                    return next(err);
-                }
-
-                res.send(questionsTemplate({ questions: result }));
-                return next();
-            });
-        });
+            res.send(questionsTemplate({ questions }));
+            return next();
+        } catch (err) {
+            return next(err);
+        }
     });
 
 
-    app.get('/api/questions', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), (req, res, next) => {
-        MongoClient.connect(process.env.MONGO_URL, (err, client) => {
-            if (err) {
-                res.sendStatus(500);
-                return next(err);
-            }
+    app.get('/api/questions', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
 
-            const dbQuery = {};
+        const dbQuery = {};
 
-            if (req.query.answered === 'true') {
-                dbQuery['answer'] = {$ne: null};
-            } else if (req.query.answered === 'false') {
-                dbQuery['answer'] = {$eq: null};
-            }
+        if (req.query.answered === 'true') {
+            dbQuery['answer'] = {$ne: null};
+        } else if (req.query.answered === 'false') {
+            dbQuery['answer'] = {$eq: null};
+        }
 
-            client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).toArray((err, result) => {
-                if (err) {
-                    res.sendStatus(500);
-                    return next(err);
-                }
+        try {
+            const client = await MongoClient.connect(process.env.MONGO_URL);
 
-                res.json({ questions: result });
-                return next();
-            });
-        });
+            const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).toArray();
+
+            res.json({ questions });
+            return next();
+        } catch (err) {
+            return next(err);
+        }
     });
 
 
-    app.post('/api/questions', validate({body: joi.object({question: joi.string().max(256).required()}).required()}), (req, res, next) => {
+    app.post('/api/questions', validate({body: joi.object({question: joi.string().max(256).required()}).required()}), async (req, res, next) => {
         const receivedAt = Date.now();
 
-        MongoClient.connect(process.env.MONGO_URL, (err, client) => {
-            if (err) {
-                res.sendStatus(500);
-                return next(err);
-            }
-            const questions = client.db('corner').collection('questions');
-            questions.insertOne({timestamp: receivedAt, question: req.body.question, answer: null}, (err) => {
-                if (err) {
-                    res.sendStatus(500);
-                    return next(err);
-                }
-            });
-        });
+        try {
+            const client = await MongoClient.connect(process.env.MONGO_URL);
 
-        res.redirect('/questions/thanks');
-        return next();
+            const questions = client.db('corner').collection('questions');
+            await questions.insertOne({timestamp: receivedAt, question: req.body.question, answer: null});
+
+            res.redirect('/questions/thanks');
+            return next();
+        } catch (err) {
+            return next(err);
+        }
     });
 
     const thanksPage = fs.readFileSync(path.join(__dirname, '../templates/questions-thanks.html'), 'utf8');
