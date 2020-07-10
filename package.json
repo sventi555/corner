@@ -1,0 +1,28 @@
+{
+  "name": "corner-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docker:build": "docker build -t corner .",
+    "lint": "eslint .",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon -e 'hbs js css html' index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
+    "handlebars": "^4.7.6",
+    "mongodb": "^3.5.9",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "eslint": "^7.4.0",
+    "nodemon": "^2.0.4"
+  }
+}
