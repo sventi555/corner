@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>corner answers</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+<body>
+    <ul id='questions'>
+        {{#each questions}}
+            <li>
+                <form onsubmit="answerQuestion(event)">
+                    <label for="answer">{{this.question}}</label></br>
+                    <textarea id="{{this._id}}" name="answer"></textarea></br>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </li>
+        {{/each}}
+    </ul>
+    <span id='auth-header' style='display:none'>{{authHeader}}</span>
+    <script>
+        function answerQuestion(event) {
+            const answer = event.target.getElementsByTagName('textarea')[0];
+            const id = answer.getAttribute('id');
+            const value = answer.value;
+            
+            const auth = document.getElementById('auth-header').innerHTML;
+            
+            fetch(`/api/questions/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': auth
+                },
+                body: JSON.stringify({answer: value})
+            })
+            .then(data => {
+                console.log(data);
+                event.target.outerHTML = '<p>Answered</p>';
+            })
+            .catch(err => {
+                console.lod(err);
+            });
+            
+            event.preventDefault();
+            return false;
+        }
+    </script>
+</body>
+</html>
