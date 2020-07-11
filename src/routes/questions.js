@@ -20,15 +20,22 @@ function questionsRoutes(app) {
             dbQuery['timestamp'] = {$gte: monthStart.getTime(), $lt: nextMonthStart.getTime()};
         }
 
+        let client;
         try {
-            const client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await MongoClient.connect(process.env.MONGO_URL);
+        } catch (err) {
+            return next(err);
+        }
 
+        try {
             const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).limit(100).toArray();
 
             res.send(questionsTemplate({ questions }));
             return next();
         } catch (err) {
             return next(err);
+        } finally {
+            await client.close();
         }
     });
 
@@ -43,15 +50,22 @@ function questionsRoutes(app) {
             dbQuery['answer'] = {$eq: null};
         }
 
+        let client;
         try {
-            const client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await MongoClient.connect(process.env.MONGO_URL);
+        } catch (err) {
+            return next(err);
+        }
 
+        try {
             const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).toArray();
 
             res.json({ questions });
             return next();
         } catch (err) {
             return next(err);
+        } finally {
+            await client.close();
         }
     });
 
@@ -59,9 +73,14 @@ function questionsRoutes(app) {
     app.post('/api/questions', validate({body: joi.object({question: joi.string().max(256).required()}).required()}), async (req, res, next) => {
         const receivedAt = Date.now();
 
+        let client;
         try {
-            const client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await MongoClient.connect(process.env.MONGO_URL);
+        } catch (err) {
+            return next(err);
+        }
 
+        try {
             const questions = client.db('corner').collection('questions');
             await questions.insertOne({timestamp: receivedAt, question: req.body.question, answer: null});
 
@@ -69,6 +88,8 @@ function questionsRoutes(app) {
             return next();
         } catch (err) {
             return next(err);
+        } finally {
+            await client.close();
         }
     });
 
