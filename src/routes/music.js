@@ -1,13 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-
 const basicAuth = require('express-basic-auth');
-const hb = require('handlebars');
 const MongoClient = require('mongodb').MongoClient;
 const multer = require('multer');
 
+const {makeHbTemplate} = require('../utils');
+
 function musicRoutes(app) {
-    const musicTemplate = hb.compile(fs.readFileSync(path.join(__dirname, '../templates/music.hbs'), 'utf8'));
+    const musicTemplate = makeHbTemplate(__dirname, '../templates/music.hbs');
     const musicUpload = multer({ dest: 'media/music' });
 
     app.get('/music', async (req, res, next) => {

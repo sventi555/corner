@@ -1,15 +1,12 @@
 
-const fs = require('fs');
-const path = require('path');
-
 const basicAuth = require('express-basic-auth');
-const hb = require('handlebars');
 const MongoClient = require('mongodb').MongoClient;
 
 const {validate, joi} = require('../middlewares/validation');
+const {makeHbTemplate} = require('../utils');
 
 function questionsRoutes(app) {
-    const questionsTemplate = hb.compile(fs.readFileSync(path.join(__dirname, '../templates/questions.hbs'), 'utf8'));
+    const questionsTemplate = makeHbTemplate(__dirname, '../templates/questions.hbs');
 
     app.get('/questions', validate({query: joi.object({date: joi.string().pattern(/^[0-1][0-9]-[0-9]{4}$/)})}), async (req, res, next) => {
         const dbQuery = {'answer': {$ne: null}};
@@ -75,9 +72,9 @@ function questionsRoutes(app) {
         }
     });
 
-    const thanksPage = fs.readFileSync(path.join(__dirname, '../templates/questions-thanks.html'), 'utf8');
+    const thanksPage = makeHbTemplate(__dirname, '../templates/questions-thanks.html');
     app.get('/questions/thanks', (req, res, next) => {
-        res.send(thanksPage);
+        res.send(thanksPage({}));
         return next();
     });
 }
