@@ -1,11 +1,3 @@
-// TODO make trello for tracking issues/tasks
-// TODO upload to git
-// TODO talk with shables this weekend about design
-// TODO document routes/methods
-// TODO write manifests
-// TODO check health of mongo before starting http server
-// TODO make util for compiling hbs template from file
-// TODO make mongo interactions use async/await
 const express = require('express');
 
 const musicRoutes = require('./src/routes/music');

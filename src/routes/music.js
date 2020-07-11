@@ -10,49 +10,32 @@ function musicRoutes(app) {
     const musicTemplate = hb.compile(fs.readFileSync(path.join(__dirname, '../templates/music.hbs'), 'utf8'));
     const musicUpload = multer({ dest: 'media/music' });
 
-    app.get('/music', (req, res, next) => {
-        MongoClient.connect(process.env.MONGO_URL, (err, client) => {
-            if (err) {
-                res.sendStatus(500);
-                return next(err);
-            }
+    app.get('/music', async (req, res, next) => {
+        try {
+            const client = await MongoClient.connect(process.env.MONGO_URL);
+            const songs = await client.db('corner').collection('songs').find().sort('timestamp', -1).limit(100).toArray();
 
-            client.db('corner').collection('songs').find().sort('timestamp', -1).limit(100).toArray((err, result) => {
-                if (err) {
-                    res.sendStatus(500);
-                    return next(err);
-                }
-
-                res.send(musicTemplate({ songs: result }));
-                return next();
-            });
-        });
+            res.send(musicTemplate({ songs }));
+            return next();
+        } catch (err) {
+            return next(err);
+        }
     });
 
-    app.post('/api/music', basicAuth({ users:{'admin': process.env.CORNER_PASSWORD} }), musicUpload.single('song'), (req, res, next) => {
+    app.post('/api/music', basicAuth({ users:{'admin': process.env.CORNER_PASSWORD} }), musicUpload.single('song'), async (req, res, next) => {
         const receivedAt = Date.now();
 
-        if (req.file.mimetype != 'audio/mpeg') {
-            res.json({ error: 'Filetype must be "audio/mpeg"'}).status(400).send();
-            return next();
-        }
+        try {
+            const client = await MongoClient.connect(process.env.MONGO_URL);
 
-        MongoClient.connect(process.env.MONGO_URL, (err, client) => {
-            if (err) {
-                res.sendStatus(500);
-                return next(err);
-            }
             const songs = client.db('corner').collection('songs');
-            songs.insertOne({timestamp: receivedAt, originalName: req.file.originalname, filename: req.file.filename}, (err) => {
-                if (err) {
-                    res.sendStatus(500);
-                    return next(err);
-                }
-            });
-        });
+            await songs.insertOne({timestamp: receivedAt, originalName: req.file.originalname, filename: req.file.filename});
 
-        res.sendStatus(200);
-        return next();
+            res.sendStatus(200);
+            return next();
+        } catch (err) {
+            return next(err);
+        }
     });
 }
 
