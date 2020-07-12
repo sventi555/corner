@@ -18,29 +18,30 @@
             </li>
         {{/each}}
     </ul>
-    <span id='auth-header' style='display:none'>{{authHeader}}</span>
     <script>
         function answerQuestion(event) {
             const answer = event.target.getElementsByTagName('textarea')[0];
             const id = answer.getAttribute('id');
             const value = answer.value;
-            
-            const auth = document.getElementById('auth-header').innerHTML;
-            
+                        
             fetch(`/api/questions/${id}`, {
                 method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': auth
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({answer: value})
             })
             .then(data => {
-                console.log(data);
-                event.target.outerHTML = '<p>Answered</p>';
+                if (data.status < 400) {
+                    event.target.outerHTML = '<p>Answered</p>';
+                } else {
+                    event.target.innerHTML += '<p>Failure - check console</p>';
+                    console.error(data);
+                }
             })
             .catch(err => {
-                console.lod(err);
+                event.target.innerHTML += '<p>Failure - check console</p>';
+                console.error(err);
             });
             
             event.preventDefault();

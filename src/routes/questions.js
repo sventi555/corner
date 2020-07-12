@@ -90,7 +90,7 @@ function questionsRoutes(app) {
         }
     });
 
-    app.patch('/api/questions/:id', basicAuth({ users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
+    app.patch('/api/questions/:id', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
         let client;
         try {
             client = await MongoClient.connect(process.env.MONGO_URL);
@@ -122,7 +122,7 @@ function questionsRoutes(app) {
         try {
             const questions = await client.db('corner').collection('questions').find({'answer': {$eq: null}}).sort('timestamp', 1).toArray();
 
-            res.send(answerTemplate({questions, authHeader: req.headers.authorization}));
+            res.send(answerTemplate({questions}));
             return next();
         } catch (err) {
             return next(err);
