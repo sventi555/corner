@@ -14,9 +14,7 @@
     </form>
     <ul id='questions'>
         {{#each questions}}
-            {{#if this.answer }}
-                <li>{{this.question}}: {{this.answer}}</li>
-            {{/if}}
+            <li>{{this.timestamp}} - {{this.question}}: {{this.answer}}</li>
         {{/each}}
     </ul>
 </body>

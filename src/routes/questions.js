@@ -3,7 +3,7 @@ const basicAuth = require('express-basic-auth');
 const {MongoClient, ObjectID} = require('mongodb');
 
 const {validate, joi} = require('../middlewares/validation');
-const {makeHbTemplate} = require('../utils');
+const {goodTime, makeHbTemplate} = require('../utils');
 
 function questionsRoutes(app) {
     const questionsTemplate = makeHbTemplate(__dirname, '../templates/questions.hbs');
@@ -29,6 +29,9 @@ function questionsRoutes(app) {
 
         try {
             const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).limit(100).toArray();
+            for (const question of questions) {
+                question['timestamp'] = goodTime(question['timestamp']);
+            }
 
             res.send(questionsTemplate({ questions }));
             return next();
@@ -121,6 +124,9 @@ function questionsRoutes(app) {
 
         try {
             const questions = await client.db('corner').collection('questions').find({'answer': {$eq: null}}).sort('timestamp', 1).toArray();
+            for (const question of questions) {
+                question['timestamp'] = goodTime(question['timestamp']);
+            }
 
             res.send(answerTemplate({questions}));
             return next();
