@@ -5,7 +5,8 @@ function errorMiddleware() {
 
         if (err.isJoi || err.code && err.code < 500) {
             const msg = 'the beans have been spilled';
-            res.status(400).send(msg);
+            const code = err.code ? err.code : 400;
+            res.status(code).send(msg);
         } else {
             logger.error(err);
             res.sendStatus(500);
