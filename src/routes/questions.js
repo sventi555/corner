@@ -33,7 +33,7 @@ function questionsRoutes(app) {
                 question['timestamp'] = goodTime(question['timestamp']);
             }
 
-            res.send(questionsTemplate({ questions }));
+            res.send(questionsTemplate({questions}));
             return next();
         } catch (err) {
             return next(err);
@@ -42,7 +42,7 @@ function questionsRoutes(app) {
         }
     });
 
-    app.get('/api/questions', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
+    app.get('/api/questions', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
         const dbQuery = {};
 
         if (req.query.answered === 'true') {
@@ -61,7 +61,7 @@ function questionsRoutes(app) {
         try {
             const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).toArray();
 
-            res.json({ questions });
+            res.json({questions});
             return next();
         } catch (err) {
             return next(err);
@@ -93,7 +93,7 @@ function questionsRoutes(app) {
         }
     });
 
-    app.patch('/api/questions/:id', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
+    app.patch('/api/questions/:id', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
             client = await MongoClient.connect(process.env.MONGO_URL);
@@ -114,7 +114,7 @@ function questionsRoutes(app) {
     });
 
     const answerTemplate = makeHbTemplate(__dirname, '../templates/questions-answer.hbs');
-    app.get('/questions/answer', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
+    app.get('/questions/answer', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
             client = await MongoClient.connect(process.env.MONGO_URL);

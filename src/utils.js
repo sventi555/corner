@@ -30,4 +30,4 @@ function makeHbTemplate(dirname, relativePathToTemplate) {
     return hb.compile(fs.readFileSync(path.join(dirname, relativePathToTemplate), 'utf8'));
 }
 
-module.exports = { goodTime, makeHbTemplate };
+module.exports = {goodTime, makeHbTemplate};

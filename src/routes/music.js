@@ -6,7 +6,7 @@ const {makeHbTemplate} = require('../utils');
 
 function musicRoutes(app) {
     const musicTemplate = makeHbTemplate(__dirname, '../templates/music.hbs');
-    const musicUpload = multer({ dest: 'media/music' });
+    const musicUpload = multer({dest: 'media/music'});
 
     app.get('/music', async (req, res, next) => {
         let client;
@@ -19,7 +19,7 @@ function musicRoutes(app) {
         try {
             const songs = await client.db('corner').collection('songs').find().sort('timestamp', -1).limit(100).toArray();
 
-            res.send(musicTemplate({ songs }));
+            res.send(musicTemplate({songs}));
             return next();
         } catch (err) {
             return next(err);
@@ -28,7 +28,7 @@ function musicRoutes(app) {
         }
     });
 
-    app.post('/api/music', basicAuth({ users:{'admin': process.env.CORNER_PASSWORD} }), musicUpload.single('song'), async (req, res, next) => {
+    app.post('/api/music', basicAuth({users:{'admin': process.env.CORNER_PASSWORD}}), musicUpload.single('song'), async (req, res, next) => {
         const receivedAt = Date.now();
 
         let client;

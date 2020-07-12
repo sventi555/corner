@@ -14,6 +14,7 @@
         "arrow-spacing": "error",
         "no-var": "error",
         "prefer-const": "error",
-        "no-console": "error"
+        "no-console": "error",
+        "object-curly-spacing": "error"
     }
 }
