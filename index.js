@@ -1,6 +1,8 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 
+const {errorMiddleware} = require('./src/middlewares/error');
+const {loggingMiddleware} = require('./src/middlewares/logging');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
 
@@ -29,6 +31,15 @@ require('dotenv').config();
 
     musicRoutes(app);
     questionsRoutes(app);
+
+    app.use(errorMiddleware());
+    app.use((req, res, next) => {
+        if (!res.headersSent) {
+            res.status(404).send('yeesh, where did I put my glasses');
+        }
+        return next();
+    });
+    app.use(loggingMiddleware());
 
     app.listen(3000);
 })();
