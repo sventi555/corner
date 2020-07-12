@@ -1,6 +1,6 @@
 
 const basicAuth = require('express-basic-auth');
-const MongoClient = require('mongodb').MongoClient;
+const {MongoClient, ObjectID} = require('mongodb');
 
 const {validate, joi} = require('../middlewares/validation');
 const {makeHbTemplate} = require('../utils');
@@ -39,9 +39,7 @@ function questionsRoutes(app) {
         }
     });
 
-
     app.get('/api/questions', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
-
         const dbQuery = {};
 
         if (req.query.answered === 'true') {
@@ -69,7 +67,6 @@ function questionsRoutes(app) {
         }
     });
 
-
     app.post('/api/questions', validate({body: joi.object({question: joi.string().max(256).required()}).required()}), async (req, res, next) => {
         const receivedAt = Date.now();
 
@@ -85,6 +82,47 @@ function questionsRoutes(app) {
             await questions.insertOne({timestamp: receivedAt, question: req.body.question, answer: null});
 
             res.redirect('/questions/thanks');
+            return next();
+        } catch (err) {
+            return next(err);
+        } finally {
+            await client.close();
+        }
+    });
+
+    app.patch('/api/questions/:id', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
+        let client;
+        try {
+            client = await MongoClient.connect(process.env.MONGO_URL);
+        } catch (err) {
+            return next(err);
+        }
+
+        try {
+            await client.db('corner').collection('questions').updateOne({'_id': ObjectID(req.params.id)}, {$set: {'answer': req.body.answer}});
+
+            res.sendStatus(200);
+            return next();
+        } catch (err) {
+            return next(err);
+        } finally {
+            await client.close();
+        }
+    });
+
+    const answerTemplate = makeHbTemplate(__dirname, '../templates/questions-answer.hbs');
+    app.get('/questions/answer', basicAuth({ challenge: true, users:{'admin': process.env.CORNER_PASSWORD} }), async (req, res, next) => {
+        let client;
+        try {
+            client = await MongoClient.connect(process.env.MONGO_URL);
+        } catch (err) {
+            return next(err);
+        }
+
+        try {
+            const questions = await client.db('corner').collection('questions').find({'answer': {$eq: null}}).sort('timestamp', 1).toArray();
+
+            res.send(answerTemplate({questions}));
             return next();
         } catch (err) {
             return next(err);
