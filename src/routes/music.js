@@ -1,7 +1,7 @@
 const basicAuth = require('express-basic-auth');
-const MongoClient = require('mongodb').MongoClient;
 const multer = require('multer');
 
+const {getClient} = require('../db');
 const {makeHbTemplate} = require('../utils');
 
 function musicRoutes(app) {
@@ -11,7 +11,7 @@ function musicRoutes(app) {
     app.get('/music', async (req, res, next) => {
         let client;
         try {
-            client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await getClient();
         } catch (err) {
             return next(err);
         }
@@ -33,7 +33,7 @@ function musicRoutes(app) {
 
         let client;
         try {
-            client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await getClient();
         } catch (err) {
             return next(err);
         }
