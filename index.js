@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 
 const {getClient} = require('./src/db');
@@ -6,7 +7,6 @@ const {loggingMiddleware} = require('./src/middlewares/logging');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
 
-require('dotenv').config();
 
 (async () => {
     // check mongo connection

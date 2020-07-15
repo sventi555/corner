@@ -21,6 +21,9 @@ spec:
       app: mongo
   serviceName: mongo  
   template:
+    metadata:
+      labels:
+        app: mongo
     spec:
       containers:
       - name: mongo
