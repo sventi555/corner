@@ -41,6 +41,9 @@ spec:
       app: corner
   serviceName: corner  
   template:
+    metadata:
+      labels:
+        app: corner
     spec:
       containers:
       - name: corner
@@ -77,6 +80,8 @@ spec:
         volumeMounts:
         - name: corner-media
           mountPath: /usr/src/app/media
+      imagePullSecrets:
+      - name: github-pkg-reg-creds
   volumeClaimTemplates:
   - metadata:
       name: corner-media

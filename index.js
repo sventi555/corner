@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 
 const {getClient} = require('./src/db');
+const logger = require('./src/logger');
 const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
 const musicRoutes = require('./src/routes/music');
@@ -16,7 +17,7 @@ const questionsRoutes = require('./src/routes/questions');
         await client.db('corner').stats();
         await client.close();
     } catch(err) {
-        // TODO add logging here for failure
+        logger.error(err);
         process.exit(1);
     }
 
