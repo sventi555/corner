@@ -52,7 +52,7 @@ spec:
         - name: NODE_ENV
           value: production
         - name: MONGO_URL
-          value: mongo
+          value: mongodb://mongo:27017
         - name: CORNER_PASSWORD
           valueFrom:
             secretKeyRef:
