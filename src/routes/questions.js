@@ -1,7 +1,8 @@
 
 const basicAuth = require('express-basic-auth');
-const {MongoClient, ObjectID} = require('mongodb');
+const {ObjectID} = require('mongodb');
 
+const {getClient} = require('../db');
 const {validate, joi} = require('../middlewares/validation');
 const {goodTime, makeHbTemplate} = require('../utils');
 
@@ -22,7 +23,7 @@ function questionsRoutes(app) {
 
         let client;
         try {
-            client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await getClient();
         } catch (err) {
             return next(err);
         }
@@ -53,7 +54,7 @@ function questionsRoutes(app) {
 
         let client;
         try {
-            client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await getClient();
         } catch (err) {
             return next(err);
         }
@@ -75,7 +76,7 @@ function questionsRoutes(app) {
 
         let client;
         try {
-            client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await getClient();
         } catch (err) {
             return next(err);
         }
@@ -96,7 +97,7 @@ function questionsRoutes(app) {
     app.patch('/api/questions/:id', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
-            client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await getClient();
         } catch (err) {
             return next(err);
         }
@@ -117,7 +118,7 @@ function questionsRoutes(app) {
     app.get('/questions/answer', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
-            client = await MongoClient.connect(process.env.MONGO_URL);
+            client = await getClient();
         } catch (err) {
             return next(err);
         }

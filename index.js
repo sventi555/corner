@@ -1,19 +1,18 @@
+require('dotenv').config();
 const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
 
+const {getClient} = require('./src/db');
 const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
 
-require('dotenv').config();
 
 (async () => {
     // check mongo connection
     let client;
     try {
-        client = await MongoClient.connect(process.env.MONGO_URL);
-        // TODO maybe log the db stats as info??
+        client = await getClient();
         await client.db('corner').stats();
         await client.close();
     } catch(err) {
