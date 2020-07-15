@@ -7,7 +7,7 @@ const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
-
+const {registerPartial} = require('./src/utils');
 
 (async () => {
     // check mongo connection
@@ -28,6 +28,8 @@ const questionsRoutes = require('./src/routes/questions');
 
     app.use(express.static('./media'));
     app.use(express.static('./static'));
+
+    registerPartial('defaultHead', __dirname, './src/templates/partials/default-head.hbs');
 
     musicRoutes(app);
     questionsRoutes(app);

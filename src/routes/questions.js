@@ -138,7 +138,7 @@ function questionsRoutes(app) {
         }
     });
 
-    const thanksPage = makeHbTemplate(__dirname, '../templates/questions-thanks.html');
+    const thanksPage = makeHbTemplate(__dirname, '../templates/questions-thanks.hbs');
     app.get('/questions/thanks', (req, res, next) => {
         res.send(thanksPage({}));
         return next();

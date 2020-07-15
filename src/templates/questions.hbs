@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>corner questions</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-</head>
+{{> defaultHead title='Ask a Question'}}
+{{!-- {{#*inline "styles"}}
+    <link rel='stylesheet' href='/main.css' />
+{{/inline}} --}}
 <body>
     <form action="/api/questions" method="post">
         <label for="question">Ask a question</label></br>
