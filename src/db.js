@@ -1,5 +1,7 @@
 const {MongoClient} = require('mongodb');
 
+const logger = require('./logger');
+
 const user = process.env.MONGO_USERNAME;
 const pass = process.env.MONGO_PASSWORD;
 const host = process.env.MONGO_HOST ? process.env.MONGO_HOST : 'localhost';
@@ -13,6 +15,7 @@ const url = process.env.MONGO_URL ? process.env.MONGO_URL : `mongodb://${user}:$
  * @returns A client which can be used to connect to mongodb.
  */
 async function getClient() {
+    logger.info(url);
     const client = await MongoClient.connect(url);
 
     return client;
