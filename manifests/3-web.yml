@@ -47,22 +47,12 @@ spec:
     spec:
       containers:
       - name: corner
-        image: docker.pkg.github.com/sventi555/corner/corner:1.0.3-alpha
+        image: docker.pkg.github.com/sventi555/corner/corner:1.0.4-alpha
         env:
         - name: NODE_ENV
           value: production
-        - name: MONGO_HOST
+        - name: MONGO_URL
           value: mongo
-        - name: MONGO_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: mongo-credentials
-              key: username
-        - name: MONGO_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mongo-credentials
-              key: password
         - name: CORNER_PASSWORD
           valueFrom:
             secretKeyRef:
