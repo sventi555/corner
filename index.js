@@ -27,7 +27,7 @@ const {registerPartial} = require('./src/utils');
     app.use(express.urlencoded({extended: true}));
 
     app.use(express.static('./media'));
-    app.use(express.static('./static'));
+    app.use(express.static('./src/static'));
 
     registerPartial('defaultHead', __dirname, './src/templates/partials/default-head.hbs');
 
