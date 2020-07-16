@@ -2,9 +2,12 @@
 <html>
 {{> defaultHead title='Answer Questions'}}
 <body>
+    <h1>Pending Questions:</h1>
+    <p>Number of unanswered questions: <b id='numOfQuestions'>{{numOfQuestions}}</b></p>
     <ul id='questions'>
         {{#each questions}}
             <li>
+                {{!-- TODO (optional) make good time into a partial and add timestamp somewhere here --}}
                 <form onsubmit="answerQuestion(event)">
                     <label for="answer">{{this.question}}</label></br>
                     <textarea id="{{this._id}}" name="answer"></textarea></br>
@@ -29,6 +32,9 @@
             .then(data => {
                 if (data.status < 400) {
                     event.target.outerHTML = '<p>Answered</p>';
+
+                    let numQuestionsElem = document.getElementById('numOfQuestions');
+                    numQuestionsElem.innerHTML = parseInt(numQuestionsElem.innerHTML) - 1;
                 } else {
                     event.target.innerHTML += '<p>Failure - check console</p>';
                     console.error(data);

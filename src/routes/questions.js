@@ -124,7 +124,7 @@ function questionsRoutes(app) {
         try {
             const questions = await client.db('corner').collection('questions').find({'answer': {$eq: null}}).sort('timestamp', 1).toArray();
 
-            res.send(answerTemplate({questions}));
+            res.send(answerTemplate({questions, numOfQuestions: questions.length}));
             return next();
         } catch (err) {
             return next(err);
