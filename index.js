@@ -30,6 +30,7 @@ const {registerPartial} = require('./src/utils');
     app.use(express.static('./src/static'));
 
     registerPartial('defaultHead', __dirname, './src/templates/partials/default-head.hbs');
+    registerPartial('goodTime', __dirname, './src/templates/partials/good-time.hbs');
 
     musicRoutes(app);
     questionsRoutes(app);

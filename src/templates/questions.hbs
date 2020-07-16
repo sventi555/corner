@@ -18,17 +18,11 @@
             </li>
         {{/each}}
     </ul>
+    {{> goodTime }}
     <script>
-        function insertGoodTime(elem) {
-            const ms = parseInt(elem.getAttribute('time'));
-            const date = new Date(ms - new Date().getTimezoneOffset()/60);
-            const time = date.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
-            const day = date.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
-
-            elem.innerHTML = `${day} ${time} - ` + elem.innerHTML;
-        }
         for (let question of document.getElementById('questions').getElementsByTagName('li')) {
-            insertGoodTime(question);
+            const timeString = goodTime(parseInt(question.getAttribute('time')))
+            question.innerHTML = timeString + ' - ' + question.innerHTML
         }
     </script>
 </body>

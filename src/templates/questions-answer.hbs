@@ -6,17 +6,25 @@
     <p>Number of unanswered questions: <b id='numOfQuestions'>{{numOfQuestions}}</b></p>
     <ul id='questions'>
         {{#each questions}}
-            <li>
-                {{!-- TODO (optional) make good time into a partial and add timestamp somewhere here --}}
+            <li style="margin-bottom:1.5em">
                 <form onsubmit="answerQuestion(event)">
-                    <label for="answer">{{this.question}}</label></br>
+                    <label class="answer-label" for="answer" time="{{this.timestamp}}">
+                        <div style="font-size:1.5em"><b>{{this.question}}</b></div>
+                    </label>
                     <textarea id="{{this._id}}" name="answer"></textarea></br>
                     <input type="submit" value="Submit"/>
                 </form>
             </li>
         {{/each}}
     </ul>
+    <a href="/questions">Back to questions</a>
+    {{> goodTime }}
     <script>
+        for (let label of document.getElementsByClassName('answer-label')) {
+            const timeString = goodTime(parseInt(label.getAttribute('time')))
+            label.innerHTML = timeString + label.innerHTML
+        }
+
         function answerQuestion(event) {
             const answer = event.target.getElementsByTagName('textarea')[0];
             const id = answer.getAttribute('id');
