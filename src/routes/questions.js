@@ -6,9 +6,10 @@ const {getClient} = require('../db');
 const {validate, joi} = require('../middlewares/validation');
 const {makeHbTemplate} = require('../utils');
 
+const {CORNER_PASSWORD} = process.env;
+
 function questionsRoutes(app) {
     const questionsTemplate = makeHbTemplate(__dirname, '../templates/questions.hbs');
-
     app.get('/questions', validate({query: joi.object({date: joi.string().pattern(/^[0-1][0-9]-[0-9]{4}$/)})}), async (req, res, next) => {
         const dbQuery = {'answer': {$ne: null}};
 
@@ -40,7 +41,7 @@ function questionsRoutes(app) {
         }
     });
 
-    app.get('/api/questions', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
+    app.get('/api/questions', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
         const dbQuery = {};
 
         if (req.query.answered === 'true') {
@@ -91,7 +92,7 @@ function questionsRoutes(app) {
         }
     });
 
-    app.patch('/api/questions/:id', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
+    app.patch('/api/questions/:id', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
             client = await getClient();
@@ -112,7 +113,7 @@ function questionsRoutes(app) {
     });
 
     const answerTemplate = makeHbTemplate(__dirname, '../templates/questions-answer.hbs');
-    app.get('/questions/answer', basicAuth({challenge: true, users:{'admin': process.env.CORNER_PASSWORD}}), async (req, res, next) => {
+    app.get('/questions/answer', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
             client = await getClient();

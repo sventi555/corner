@@ -4,6 +4,8 @@ const multer = require('multer');
 const {getClient} = require('../db');
 const {makeHbTemplate} = require('../utils');
 
+const {CORNER_PASSWORD} = process.env;
+
 function musicRoutes(app) {
     const musicTemplate = makeHbTemplate(__dirname, '../templates/music.hbs');
     const musicUpload = multer({dest: 'media/music'});
@@ -28,7 +30,7 @@ function musicRoutes(app) {
         }
     });
 
-    app.post('/api/music', basicAuth({users:{'admin': process.env.CORNER_PASSWORD}}), musicUpload.single('song'), async (req, res, next) => {
+    app.post('/api/music', basicAuth({users:{'admin': CORNER_PASSWORD}}), musicUpload.single('song'), async (req, res, next) => {
         const receivedAt = Date.now();
 
         let client;
