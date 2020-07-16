@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: corner
-        image: docker.pkg.github.com/sventi555/corner/corner:1.0.4-alpha
+        image: docker.pkg.github.com/sventi555/corner/corner:1.0.6-alpha
         env:
         - name: NODE_ENV
           value: production
