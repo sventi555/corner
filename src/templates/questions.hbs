@@ -12,8 +12,24 @@
     </form>
     <ul id='questions'>
         {{#each questions}}
-            <li>{{this.timestamp}} - {{this.question}}: {{this.answer}}</li>
+            <li time="{{this.timestamp}}">
+                <h3 style='display:inline'>{{this.question}}</h3>
+                <p>&nbsp&nbsp&nbsp&nbsp{{this.answer}}</p>
+            </li>
         {{/each}}
     </ul>
+    <script>
+        function insertGoodTime(elem) {
+            const ms = parseInt(elem.getAttribute('time'));
+            const date = new Date(ms - new Date().getTimezoneOffset()/60);
+            const time = date.toLocaleTimeString('en-US', {hour: 'numeric', minute: '2-digit'});
+            const day = date.toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
+
+            elem.innerHTML = `${day} ${time} - ` + elem.innerHTML;
+        }
+        for (let question of document.getElementById('questions').getElementsByTagName('li')) {
+            insertGoodTime(question);
+        }
+    </script>
 </body>
 </html>
