@@ -4,20 +4,20 @@
 <body>
     <h1>Pending Questions:</h1>
     <p>Number of unanswered questions: <b id='numOfQuestions'>{{numOfQuestions}}</b></p>
-    <ul id='questions'>
+    <ul id='questions' style='padding-left:1em'>
         {{#each questions}}
-            <li style="margin-bottom:1.5em">
-                <form onsubmit="answerQuestion(event)">
-                    <label class="answer-label" for="answer" time="{{this.timestamp}}">
-                        <div style="font-size:1.5em"><b>{{this.question}}</b></div>
+            <li style='margin-bottom:1.5em'>
+                <form onsubmit='return answerQuestion(event)'>
+                    <label class='answer-label' for='answer' time='{{this.timestamp}}'>
+                        <div style='font-size:1.5em'><b>{{this.question}}</b></div>
                     </label>
-                    <textarea id="{{this._id}}" name="answer"></textarea></br>
-                    <input type="submit" value="Submit"/>
+                    <textarea id='{{this._id}}' name='answer' rows='4' cols='35'></textarea></br>
+                    <input type='submit' value='Submit'/>
                 </form>
             </li>
         {{/each}}
     </ul>
-    <a href="/questions">Back to questions</a>
+    <a href='/questions'>Back to questions</a>
     {{> goodTime }}
     <script>
         for (let label of document.getElementsByClassName('answer-label')) {
@@ -29,6 +29,8 @@
             const answer = event.target.getElementsByTagName('textarea')[0];
             const id = answer.getAttribute('id');
             const value = answer.value;
+
+            if (value.trim() === '') return false;
                         
             fetch(`/api/questions/${id}`, {
                 method: 'PATCH',
@@ -53,7 +55,6 @@
                 console.error(err);
             });
             
-            event.preventDefault();
             return false;
         }
     </script>

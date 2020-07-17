@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+{{> defaultHead title='Ask a Question'}}
+<body>
+    <div id='question' time='{{question.timestamp}}'>
+        <h3 id='{{question._id}}' style='display:inline'>{{question.question}}</h3>
+        <p style='margin-top:0.5em'>&nbsp&nbsp&nbsp&nbsp{{{question.answer}}}</p>
+    </div>
+    {{> goodTime }}
+    <script>
+        const question = document.getElementById('question');
+        const timeString = goodTime(parseInt(question.getAttribute('time')))
+        question.innerHTML = timeString + ' - ' + question.innerHTML
+    </script>
+</body>
+</html>
