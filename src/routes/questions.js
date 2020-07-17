@@ -78,7 +78,7 @@ function questionsRoutes(app) {
             const questions = client.db('corner').collection('questions');
             await questions.insertOne({timestamp: receivedAt, question: req.body.question, answer: null});
 
-            res.redirect('/questions/thanks');
+            res.redirect('/questions-thanks');
             return next();
         } catch (err) {
             return next(err);
@@ -108,7 +108,7 @@ function questionsRoutes(app) {
     });
 
     const answerTemplate = makeHbTemplate(__dirname, '../templates/questions-answer.hbs');
-    app.get('/questions/answer', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
+    app.get('/questions-answer', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
             client = await getClient();
@@ -129,7 +129,7 @@ function questionsRoutes(app) {
     });
 
     const thanksPage = makeHbTemplate(__dirname, '../templates/questions-thanks.hbs');
-    app.get('/questions/thanks', (req, res, next) => {
+    app.get('/questions-thanks', (req, res, next) => {
         res.send(thanksPage({}));
         return next();
     });
