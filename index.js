@@ -2,12 +2,12 @@ require('dotenv').config();
 const express = require('express');
 
 const {getClient} = require('./src/db');
+const initHb = require('./src/initHb');
 const logger = require('./src/logger');
 const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
-const {registerPartial} = require('./src/utils');
 
 (async () => {
     // check mongo connection
@@ -29,8 +29,7 @@ const {registerPartial} = require('./src/utils');
     app.use(express.static('./media'));
     app.use(express.static('./src/static'));
 
-    registerPartial('defaultHead', __dirname, './src/templates/partials/default-head.hbs');
-    registerPartial('goodTime', __dirname, './src/templates/partials/good-time.hbs');
+    initHb();
 
     musicRoutes(app);
     questionsRoutes(app);

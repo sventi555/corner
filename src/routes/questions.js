@@ -4,18 +4,21 @@ const {ObjectID} = require('mongodb');
 
 const {getClient} = require('../db');
 const {validate, joi} = require('../middlewares/validation');
-const {makeHbTemplate} = require('../utils');
+const {makeHbTemplate} = require('../hbUtils');
 
 const {CORNER_PASSWORD} = process.env;
 
 function questionsRoutes(app) {
+    const PAGE_SIZE = 100;
+
     const questionTemplate = makeHbTemplate(__dirname, '../templates/question.hbs');
     const questionsTemplate = makeHbTemplate(__dirname, '../templates/questions.hbs');
     app.get('/questions/:id?',
         validate({
             query: joi.object({
                 questionContains: joi.string().max(256),
-                answerContains: joi.string().max(256)
+                answerContains: joi.string().max(256),
+                page: joi.number().integer().min(0)
             }),
             params: joi.object({
                 id: joi.string().length(24)
@@ -51,11 +54,22 @@ function questionsRoutes(app) {
             if (req.query.answerContains) {
                 dbQuery['answer'].$regex = `.*${req.query.answerContains}.*`;
             }
+            const pageNum = req.query.page ? parseInt(req.query.page) : 0;
 
             try {
-                const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).limit(100).toArray();
+                const questions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).skip(PAGE_SIZE * pageNum).limit(PAGE_SIZE).toArray();
 
-                res.send(questionsTemplate({questions}));
+                if (questions.length === 0) return next();
+
+                let isLastPage = false;
+                if (questions.length < PAGE_SIZE) {
+                    isLastPage = true;
+                } else {
+                    const nextPageQuestions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).skip(PAGE_SIZE * (pageNum + 1)).limit(PAGE_SIZE).toArray();
+                    if (nextPageQuestions.length == 0) isLastPage = true;
+                }
+
+                res.send(questionsTemplate({questions, pageNum, isLastPage}));
                 return next();
             } catch (err) {
                 return next(err);
