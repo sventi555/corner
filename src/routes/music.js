@@ -2,7 +2,7 @@ const basicAuth = require('express-basic-auth');
 const multer = require('multer');
 
 const {getClient} = require('../db');
-const {makeHbTemplate} = require('../utils');
+const {makeHbTemplate} = require('../hbUtils');
 
 const {CORNER_PASSWORD} = process.env;
 

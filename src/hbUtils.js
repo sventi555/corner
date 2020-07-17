@@ -16,6 +16,16 @@ function makeHbTemplate(dirname, relativePathToTemplate) {
 }
 
 /**
+ * Registers fn as a handlebars helper under the provided name.
+ *
+ * @param {string} name - The name of the helper.
+ * @param {function} fn - A valid handlebars helper function.
+ */
+function registerHelper(name, fn) {
+    hb.registerHelper(name, fn);
+}
+
+/**
  * Registers the specified partial for use in other templates.
  * Partial must be registered before use.
  *
@@ -28,4 +38,4 @@ function registerPartial(registerAs, dirname, relativePathToPartial) {
     hb.registerPartial(registerAs, fs.readFileSync(path.join(dirname, relativePathToPartial), 'utf8'));
 }
 
-module.exports = {makeHbTemplate, registerPartial};
+module.exports = {makeHbTemplate, registerHelper, registerPartial};
