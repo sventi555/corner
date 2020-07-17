@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
 {{> defaultHead title='Ask a Question'}}
-{{!-- {{#*inline "styles"}}
+{{!-- {{#*inline 'styles'}}
     <link rel='stylesheet' href='/main.css' />
 {{/inline}} --}}
 <body>
-    <form action="/api/questions" method="post">
-        <label for="question">Ask a question</label></br>
-        <textarea id="question" name="question"></textarea></br>
-        <input type="submit" value="Submit"/>
+    <form id='question-form' action='/api/questions' onsubmit='return validateForm()' method='post'>
+        <label for='question'>Ask a question</label></br>
+        <textarea id='question' name='question' rows='4' cols='35'></textarea></br>
+        <input type='submit' value='Submit'/>
     </form>
-    <ul id='questions'>
+    <ul id='questions' style='padding-left:1em'>
         {{#each questions}}
-            <li time="{{this.timestamp}}">
-                <h3 style='display:inline'>{{this.question}}</h3>
-                <p>&nbsp&nbsp&nbsp&nbsp{{this.answer}}</p>
+            <li time='{{this.timestamp}}'>
+                <h3 id={{this._id}} style='display:inline'>{{this.question}}</h3>
+                <p style='margin-top:0.5em'>&nbsp&nbsp&nbsp&nbsp{{{this.answer}}}</p>
             </li>
         {{/each}}
     </ul>
@@ -23,6 +23,19 @@
         for (let question of document.getElementById('questions').getElementsByTagName('li')) {
             const timeString = goodTime(parseInt(question.getAttribute('time')))
             question.innerHTML = timeString + ' - ' + question.innerHTML
+        }
+
+        let submittedEmpty = false;
+        function validateForm() {
+            const ta = document.getElementById('question');
+            if (ta.value.trim() === '') {
+                if (!submittedEmpty) {
+                    submittedEmpty = true;
+                    document.getElementById('question-form').innerHTML += 'you\'ve gotsta ask <i>something</i> honey';
+                }
+                return false;
+            }
+            return true;
         }
     </script>
 </body>
