@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Auto-Release
 on:
   release:
     types: [published]
@@ -29,7 +29,7 @@ jobs:
       uses: matootie/dokube@v1.3.1
       with:
         personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-        clusterName: sventis-corner
+        clusterName: sventis-cluster
         namespace: corner
     - name: Update Deployment
       run: kubectl set image deployment.apps/corner corner='docker.pkg.github.com/sventi555/corner/corner:${GITHUB_REF##*/}'
