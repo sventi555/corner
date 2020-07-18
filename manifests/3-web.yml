@@ -35,6 +35,8 @@ kind: StatefulSet
 metadata:
   name: corner
   namespace: corner
+  labels:
+    app: corner
 spec:
   selector:
     matchLabels:
