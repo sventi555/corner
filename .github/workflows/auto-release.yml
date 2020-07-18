@@ -32,7 +32,7 @@ jobs:
         clusterName: sventis-corner
         namespace: corner
     - name: Update Deployment
-        run: kubectl set image deployment.apps/corner corner='docker.pkg.github.com/sventi555/corner/corner:${GITHUB_REF##*/}'
+      run: kubectl set image deployment.apps/corner corner='docker.pkg.github.com/sventi555/corner/corner:${GITHUB_REF##*/}'
     - name: Wait for Deployment
-        run: kubectl rollout status deployment/corner -w
+      run: kubectl rollout status deployment/corner -w
 
