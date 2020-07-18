@@ -32,8 +32,8 @@ jobs:
         personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         clusterName: sventis-cluster
         namespace: corner
-    - name: Update Deployment
-      run: kubectl set image deployment.apps/corner corner='docker.pkg.github.com/sventi555/corner/corner:${GITHUB_REF##*/}'
-    - name: Wait for Deployment
-      run: kubectl rollout status deployment/corner -w
+    - name: Update StatefulSet
+      run: kubectl set image statefulset.apps/corner corner='docker.pkg.github.com/sventi555/corner/corner:${GITHUB_REF##*/}'
+    - name: Wait for StatefulSet
+      run: kubectl rollout status statefulset/corner -w
 
