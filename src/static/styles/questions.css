@@ -1,0 +1,27 @@
+#question-form {
+    margin-bottom: 1em;
+}
+
+#question-form label {
+    font-size: 1.4em;
+}
+
+#question-form textarea {
+    font-size: 0.95em;
+    margin: 0.2em;
+}
+
+#questions li {
+    padding: 1em 0;
+    width: 85vw;
+}
+
+#questions li:not(:last-child) {
+    border-bottom: 0.1em solid var(--bg-secondary-colour);
+}
+
+.question {
+    display: inline-block;
+    font-size: 1.4em;
+    margin-bottom: 0.5em;
+}

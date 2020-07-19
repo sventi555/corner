@@ -1,1 +1,70 @@
+@font-face {
+    font-family: Inconsolata;
+    src: url(/fonts/Inconsolata.otf);
+}
 
+@font-face {
+    font-family: Hamma;
+    src: url(/fonts/Hamma.ttf);
+}
+
+/* :root {
+    --text-colour: rgb(225, 225, 225);
+    --bg-colour: rgb(40, 45, 52);
+    --bg-secondary-colour: rgb(55, 60, 67);
+} */
+
+:root {
+    --bg-colour: rgb(225, 225, 225);
+    --bg-secondary-colour: rgb(210, 210, 210);
+}
+
+* {
+    background-color: var(--bg-colour);
+    font-family: Inconsolata;
+    margin: 0;
+    padding: 0;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+#site-header {
+    font-family: Hamma;
+    font-size: 4em;
+    letter-spacing: 0.02em;
+    padding: 0.2em;
+    padding-bottom: 0;
+}
+
+main {
+    padding: 0.8em;
+}
+
+#pigeon {
+    background-color: transparent;
+    bottom: 0;
+    min-width: 4.6em;
+    position: fixed;
+    right: 0.5em;
+    width: 10vw;
+}
+
+textarea {
+    background-color: white;
+    border-radius: 0.3em;
+}
+
+ul {
+    list-style-type: square;
+}
+
+.submit {
+    background-color: var(--bg-secondary-colour);
+    font-size: 1.2em;
+    padding: 0.2em;
+    transition: all .1s ease-in-out;
+}
+
+.submit:hover {
+    transform: scale(1.04);
+}
