@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html>
-{{> defaultHead title='Ask a Question'}}
-{{!-- {{#*inline 'styles'}}
-    <link rel='stylesheet' href='/main.css' />
-{{/inline}} --}}
-<body>
+{{> default title='Ask a Question'}}
+
+{{#*inline 'styles'}}
+    <link rel='stylesheet' href='/styles/questions.css' />
+{{/inline}}
+
+{{#*inline 'main'}}
+<main>
     {{#unless pageNum}}
     <form id='question-form' action='/api/questions' onsubmit='return validateForm()' method='post'>
         <label for='question'>Ask a question</label></br>
-        <textarea id='question' name='question' rows='4' cols='35'></textarea></br>
-        <input type='submit' value='Submit'/>
+        <textarea id='question-input' name='question' rows='4' cols='35'></textarea></br>
+        <input class='submit' type='submit' value='Submit'/>
     </form>
     {{/unless}}
     {{#if pageNum}}
@@ -18,33 +19,36 @@
     <ul id='questions' style='padding-left:1em'>
     {{#each questions}}
         <li time='{{this.timestamp}}'>
-            <h3 id={{this._id}} style='display:inline'>{{this.question}}</h3>
-            <p style='margin-top:0.5em'>&nbsp&nbsp&nbsp&nbsp{{{this.answer}}}</p>
+            <h3 id={{this._id}} class='question'>{{this.question}}</h3>
+            <p class='answer'>&nbsp&nbsp&nbsp&nbsp{{{this.answer}}}</p>
         </li>
     {{/each}}
     </ul>
     {{#unless isLastPage}}
     <a href='/questions?page={{add pageNum 1}}'>More questions</a>
     {{/unless}}
-    {{> goodTime }}
-    <script>
-        for (let question of document.getElementById('questions').getElementsByTagName('li')) {
-            const timeString = goodTime(parseInt(question.getAttribute('time')))
-            question.innerHTML = timeString + ' - ' + question.innerHTML
-        }
+</main>
+{{/inline}}
 
-        let submittedEmpty = false;
-        function validateForm() {
-            const ta = document.getElementById('question');
-            if (ta.value.trim() === '') {
-                if (!submittedEmpty) {
-                    submittedEmpty = true;
-                    document.getElementById('question-form').innerHTML += 'you\'ve gotsta ask <i>something</i> honey';
-                }
-                return false;
+{{#*inline 'scripts'}}
+{{> goodTime }}
+<script>
+    for (let question of document.getElementById('questions').getElementsByTagName('li')) {
+        const timeString = goodTime(parseInt(question.getAttribute('time')))
+        question.innerHTML = timeString + ' - ' + question.innerHTML
+    }
+
+    let submittedEmpty = false;
+    function validateForm() {
+        const ta = document.getElementById('question-input');
+        if (ta.value.trim() === '') {
+            if (!submittedEmpty) {
+                submittedEmpty = true;
+                document.getElementById('question-form').innerHTML += 'you\'ve gotsta ask <i>something</i> honey';
             }
-            return true;
+            return false;
         }
-    </script>
-</body>
-</html>
+        return true;
+    }
+</script>
+{{/inline}}

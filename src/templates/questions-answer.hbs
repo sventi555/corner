@@ -1,62 +1,67 @@
-<!DOCTYPE html>
-<html>
-{{> defaultHead title='Answer Questions'}}
-<body>
+{{> default title='Answer Questions'}}
+
+{{#*inline 'styles'}}
+    <link rel='stylesheet' href='/styles/questions-answer.css' />
+{{/inline}}
+
+{{#*inline 'main'}}
+<main>
     <h1>Pending Questions:</h1>
     <p>Number of unanswered questions: <b id='numOfQuestions'>{{numOfQuestions}}</b></p>
     <ul id='questions' style='padding-left:1em'>
     {{#each questions}}
-        <li style='margin-bottom:1.5em'>
-            <form onsubmit='return answerQuestion(event)'>
-                <label class='answer-label' for='answer' time='{{this.timestamp}}'>
-                    <div style='font-size:1.5em'><b>{{this.question}}</b></div>
-                </label>
+        <li>
+            <form class='answer-form' onsubmit='return answerQuestion(event)' time='{{this.timestamp}}'>
+                <label class='question' for='answer'>{{this.question}}</label></br>
                 <textarea id='{{this._id}}' name='answer' rows='4' cols='35'></textarea></br>
-                <input type='submit' value='Submit'/>
+                <input class='submit' type='submit' value='Submit'/>
             </form>
         </li>
     {{/each}}
     </ul>
     <a href='/questions'>Back to questions</a>
-    {{> goodTime }}
-    <script>
-        for (let label of document.getElementsByClassName('answer-label')) {
-            const timeString = goodTime(parseInt(label.getAttribute('time')))
-            label.innerHTML = timeString + label.innerHTML
-        }
+</main>
+{{/inline}}
 
-        function answerQuestion(event) {
-            const answer = event.target.getElementsByTagName('textarea')[0];
-            const id = answer.getAttribute('id');
-            const value = answer.value;
+{{#*inline 'scripts'}}
+{{> goodTime }}
+<script>
+    for (let form of document.getElementsByClassName('answer-form')) {
+        const timeString = goodTime(parseInt(form.getAttribute('time')))
+        form.innerHTML = `<p>${timeString}</p>` + form.innerHTML
+    }
 
-            if (value.trim() === '') return false;
-                        
-            fetch(`/api/questions/${id}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({answer: value})
-            })
-            .then(data => {
-                if (data.status < 400) {
-                    event.target.outerHTML = '<p>Answered</p>';
+    function answerQuestion(event) {
+        const answer = event.target.getElementsByTagName('textarea')[0];
+        const id = answer.getAttribute('id');
+        const value = answer.value;
 
-                    let numQuestionsElem = document.getElementById('numOfQuestions');
-                    numQuestionsElem.innerHTML = parseInt(numQuestionsElem.innerHTML) - 1;
-                } else {
-                    event.target.innerHTML += '<p>Failure - check console</p>';
-                    console.error(data);
-                }
-            })
-            .catch(err => {
+        if (value.trim() === '') return false;
+                    
+        fetch(`/api/questions/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({answer: value})
+        })
+        .then(data => {
+            if (data.status < 400) {
+                event.target.outerHTML = '<p class=\'answer-form\'>Answered</p>';
+
+                let numQuestionsElem = document.getElementById('numOfQuestions');
+                numQuestionsElem.innerHTML = parseInt(numQuestionsElem.innerHTML) - 1;
+            } else {
                 event.target.innerHTML += '<p>Failure - check console</p>';
-                console.error(err);
-            });
-            
-            return false;
-        }
-    </script>
-</body>
-</html>
+                console.error(data);
+            }
+        })
+        .catch(err => {
+            event.target.innerHTML += '<p>Failure - check console</p>';
+            console.error(err);
+        });
+        
+        return false;
+    }
+</script>
+{{/inline}}

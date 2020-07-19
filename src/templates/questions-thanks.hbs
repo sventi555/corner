@@ -1,8 +1,12 @@
-<!DOCTYPE html>
-<html>
-{{> defaultHead title='Thanks'}}
-<body>
-    <p>Thamks</p>
-    <a href='/questions'>Back at it</a>
-</body>
-</html>
+{{> default title='Thanks'}}
+
+{{#*inline 'styles'}}
+    <link rel='stylesheet' href='/styles/questions-thanks.css' />
+{{/inline}}
+
+{{#*inline 'main'}}
+<main>
+    <p id='thanks'>Thamks</p>
+    <a id='back' href='/questions'>Back at it</a>
+</main>
+{{/inline}}

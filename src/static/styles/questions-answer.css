@@ -1,0 +1,12 @@
+#questions {
+    margin-top: 1em;
+}
+
+.question {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.answer-form {
+    margin-bottom: 1em;
+}
