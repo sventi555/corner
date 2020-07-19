@@ -21,7 +21,6 @@
 
 * {
     background-color: var(--bg-colour);
-    color: var(--text-colour);
     font-family: Inconsolata;
     margin: 0;
     padding: 0;
@@ -53,7 +52,6 @@ main {
 textarea {
     background-color: white;
     border-radius: 0.3em;
-    color: black;
 }
 
 ul {
