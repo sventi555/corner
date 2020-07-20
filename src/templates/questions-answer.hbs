@@ -11,9 +11,9 @@
     <ul id='questions' style='padding-left:1em'>
     {{#each questions}}
         <li>
-            <form class='answer-form' onsubmit='return answerQuestion(event)' time='{{this.timestamp}}'>
+            <form id='{{this._id}}' class='answer-form' onsubmit='return answerQuestion(event)' time='{{this.timestamp}}'>
                 <label class='question' for='answer'>{{this.question}}</label></br>
-                <textarea id='{{this._id}}' name='answer' rows='4' cols='35'></textarea></br>
+                <textarea  name='answer' rows='4' cols='35'></textarea></br>
                 <input class='submit' type='submit' value='Submit'/>
             </form>
         </li>
@@ -33,7 +33,7 @@
 
     function answerQuestion(event) {
         const answer = event.target.getElementsByTagName('textarea')[0];
-        const id = answer.getAttribute('id');
+        const id = event.target.getAttribute('id');
         const value = answer.value;
 
         if (value.trim() === '') return false;

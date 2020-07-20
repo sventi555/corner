@@ -31,9 +31,11 @@ function questionsRoutes(app) {
                 return next(err);
             }
 
+            const dbQuery = {'answer': {$ne: null}};
             if (req.params.id) {
+                dbQuery['_id'] = ObjectID(req.params.id);
                 try {
-                    const question = await client.db('corner').collection('questions').findOne({'_id': ObjectID(req.params.id)});
+                    const question = await client.db('corner').collection('questions').findOne(dbQuery);
                     if (!question) {
                         return next();
                     }
@@ -47,7 +49,6 @@ function questionsRoutes(app) {
                 }
             }
 
-            const dbQuery = {'answer': {$ne: null}};
             if (req.query.questionContains) {
                 dbQuery['question'] = {$regex: `.*${req.query.questionContains}.*`};
             }
