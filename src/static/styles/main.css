@@ -21,6 +21,7 @@
 
 * {
     background-color: var(--bg-colour);
+    color: black;
     font-family: Inconsolata;
     margin: 0;
     padding: 0;

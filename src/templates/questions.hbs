@@ -18,8 +18,8 @@
     {{/if}}
     <ul id='questions' style='padding-left:1em'>
     {{#each questions}}
-        <li time='{{this.timestamp}}'>
-            <h3 id={{this._id}} class='question'>{{this.question}}</h3>
+        <li id={{this._id}} time='{{this.timestamp}}'>
+            <h3 class='question'>{{this.question}}</h3>
             <p class='answer'>&nbsp&nbsp&nbsp&nbsp{{{this.answer}}}</p>
         </li>
     {{/each}}
