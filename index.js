@@ -6,6 +6,7 @@ const initHb = require('./src/initHb');
 const logger = require('./src/logger');
 const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
+const notFoundRoute = require('./src/routes/not-found');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
 
@@ -35,12 +36,7 @@ const questionsRoutes = require('./src/routes/questions');
     questionsRoutes(app);
 
     app.use(errorMiddleware());
-    app.use((req, res, next) => {
-        if (!res.headersSent) {
-            res.status(404).send('yeesh, where did I put my glasses');
-        }
-        return next();
-    });
+    notFoundRoute(app);
     app.use(loggingMiddleware());
 
     app.listen(3000);
