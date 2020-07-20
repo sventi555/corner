@@ -8,6 +8,7 @@ const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
+const {makeHbTemplate} = require('./src/hbUtils');
 
 (async () => {
     // check mongo connection
@@ -35,9 +36,10 @@ const questionsRoutes = require('./src/routes/questions');
     questionsRoutes(app);
 
     app.use(errorMiddleware());
+    const errorTemplate = makeHbTemplate(__dirname, './src/templates/error.hbs');
     app.use((req, res, next) => {
         if (!res.headersSent) {
-            res.status(404).send('yeesh, where did I put my glasses');
+            res.status(404).send(errorTemplate({error: 'yeesh, where did I put my glasses'}));
         }
         return next();
     });
