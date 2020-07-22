@@ -30,7 +30,13 @@ function musicRoutes(app) {
         }
     });
 
-    app.post('/api/music', basicAuth({users:{'admin': CORNER_PASSWORD}}), musicUpload.single('song'), async (req, res, next) => {
+    const uploadTemplate = makeHbTemplate(__dirname, '../templates/music-upload.hbs');
+    app.get('/music-upload', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
+        res.send(uploadTemplate({}));
+        return next();
+    });
+
+    app.post('/api/music', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), musicUpload.single('song'), async (req, res, next) => {
         const receivedAt = Date.now();
 
         let client;
@@ -42,7 +48,12 @@ function musicRoutes(app) {
 
         try {
             const songs = client.db('corner').collection('songs');
-            await songs.insertOne({timestamp: receivedAt, originalName: req.file.originalname, filename: req.file.filename});
+            await songs.insertOne({
+                timestamp: receivedAt,
+                originalName: req.file.originalname,
+                filename: req.file.filename,
+                mimetype: req.file.mimetype
+            });
 
             res.sendStatus(200);
             return next();
