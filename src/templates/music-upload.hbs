@@ -2,9 +2,27 @@
 
 {{#*inline 'main'}}
 <main>
-    <form action='/api/music' method='post' enctype='multipart/form-data'>
-        <input type='file' name='song' />
+    <form action='/api/music' method='post' enctype='multipart/form-data' onsubmit='return validateForm(event)'>
+        <input id='song' type='file' name='song' />
         <input class='submit' type='submit' value='Submit'/>
     </form>
 </main>
+{{/inline}}
+
+{{#*inline 'scripts'}}
+<script>
+    let submittedEmpty = false;
+    function validateForm(event) {
+        const song = document.getElementById('song');
+        if (song.files.length === 0) {
+            if (!submittedEmpty) {
+                submittedEmpty = true;
+                const main = document.getElementsByTagName('main')[0];
+                main.innerHTML += '<p style=\'color:red\'>Cannot upload empty file</p>';
+            }
+            return false;
+        }
+        return true;
+    }
+</script>
 {{/inline}}

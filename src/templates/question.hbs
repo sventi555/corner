@@ -1,16 +1,16 @@
 {{> default title='Ask a Question'}}
 
 {{#*inline 'styles'}}
-    <link rel='stylesheet' href='/styles/question.css?v=1' />
+<link rel='stylesheet' href='/styles/question.css?v=1' />
 {{/inline}}
 
 {{#*inline 'main'}}
-    <main>
-    <div id='question-wrapper' time='{{question.timestamp}}'>
-        <h3 id='question'>{{question.question}}</h3>
-        <p id='answer'>&nbsp&nbsp&nbsp&nbsp{{{question.answer}}}</p>
-    </div>
-    </main>
+<main>
+<div id='question-wrapper' time='{{question.timestamp}}'>
+    <h3 id='question'>{{question.question}}</h3>
+    <p id='answer'>&nbsp&nbsp&nbsp&nbsp{{{question.answer}}}</p>
+</div>
+</main>
 {{/inline}}
 
 {{#*inline 'scripts'}}
