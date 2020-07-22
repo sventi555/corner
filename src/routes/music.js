@@ -52,10 +52,10 @@ function musicRoutes(app) {
                 timestamp: receivedAt,
                 originalName: req.file.originalname,
                 filename: req.file.filename,
-                mimetype: req.file.mimetype
+                isVideo: req.file.mimetype.startsWith('video')
             });
 
-            res.sendStatus(200);
+            res.redirect('/music');
             return next();
         } catch (err) {
             return next(err);

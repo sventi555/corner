@@ -1,11 +1,33 @@
 {{> default title='Music'}}
 
+{{#*inline 'styles'}}
+<link rel='stylesheet' href='/styles/music.css' />
+{{/inline}}
+
 {{#*inline 'main'}}
 <main>
+    <h1 id='title'>Musics</h1>
     <ul id='songs'>
-    {{#each songs}}
-        <li><a target='_blank' href='/music/{{this.filename}}'>{{this.originalName}}</a></li>
-    {{/each}}
+        {{#each songs}}
+        <div class='song-wrapper' time='{{this.timestamp}}'>
+            {{#unless this.isVideo}}
+            <audio controls src='{{this.filename}}'>Your browser is sad.</audio>
+            {{/unless}}
+            {{#if this.isVideo}}
+            <video controls src='{{this.filename}}' width='300'>Your browser is sad.</video>
+            {{/if}}
+        </div>
+        {{/each}}
     </ul>
 </main>
+{{/inline}}
+
+{{#*inline 'scripts'}}
+{{> goodTime }}
+<script>
+    for (const song of document.getElementsByClassName('song-wrapper')) {
+        const timeString = goodTime(parseInt(song.getAttribute('time')))
+        song.innerHTML = `<p>${timeString}</p>` + song.innerHTML
+    }
+</script>
 {{/inline}}
