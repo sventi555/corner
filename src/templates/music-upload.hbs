@@ -1,0 +1,10 @@
+{{> default title='Upload Music'}}
+
+{{#*inline 'main'}}
+<main>
+    <form action='/api/music' method='post' enctype='multipart/form-data'>
+        <input type='file' name='song' />
+        <input class='submit' type='submit' value='Submit'/>
+    </form>
+</main>
+{{/inline}}
