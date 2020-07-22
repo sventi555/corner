@@ -29,25 +29,8 @@
     word-wrap: break-word;
 }
 
-#site-header {
-    font-family: Hamma;
-    font-size: 4em;
-    letter-spacing: 0.02em;
-    padding: 0.2em;
-    padding-bottom: 0;
-}
-
 main {
     padding: 0.8em;
-}
-
-#pigeon {
-    background-color: transparent;
-    bottom: 0;
-    min-width: 4.6em;
-    position: fixed;
-    right: 0.5em;
-    width: 10vw;
 }
 
 textarea {
@@ -57,6 +40,51 @@ textarea {
 
 ul {
     list-style-type: square;
+}
+
+#site-header {
+    padding: 1em;
+}
+
+#logo {
+    font-size: 4em;
+    font-family: Hamma;
+    letter-spacing: 0.02em;
+    padding-bottom: 0;
+}
+
+#site-nav ul {
+    list-style-type: none;
+}
+
+#site-nav ul li {
+    display: inline-block;
+    transition: all .1s ease-in-out;
+}
+
+#site-nav ul li:hover {
+    transform: scale(1.04);
+}
+
+#site-nav ul li a {
+    background-color: var(--bg-secondary-colour);
+    box-shadow: 2px 2px;
+    font-size: 1.2em;
+    padding: 0.2em;
+    text-decoration: none;
+}
+
+#title {
+    margin-bottom: 0.5em;
+}
+
+#pigeon {
+    background-color: transparent;
+    bottom: 0;
+    min-width: 4.6em;
+    position: fixed;
+    right: 0.5em;
+    width: 10vw;
 }
 
 .submit {

@@ -1,7 +1,7 @@
 {{> default title='Ask a Question'}}
 
 {{#*inline 'styles'}}
-<link rel='stylesheet' href='/styles/questions.css?v=1' />
+<link rel='stylesheet' href='/styles/questions.css?v=2' />
 {{/inline}}
 
 {{#*inline 'main'}}
@@ -33,7 +33,7 @@
 {{#*inline 'scripts'}}
 {{> goodTime }}
 <script>
-    for (let question of document.getElementById('questions').getElementsByTagName('li')) {
+    for (const question of document.getElementById('questions').getElementsByTagName('li')) {
         const timeString = goodTime(parseInt(question.getAttribute('time')))
         question.innerHTML = timeString + ' - ' + question.innerHTML
     }
