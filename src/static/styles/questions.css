@@ -4,6 +4,7 @@
 
 #question-form label {
     font-size: 1.4em;
+    font-weight: bold;
 }
 
 #question-form textarea {

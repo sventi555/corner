@@ -26,7 +26,7 @@
 {{#*inline 'scripts'}}
 {{> goodTime }}
 <script>
-    for (let form of document.getElementsByClassName('answer-form')) {
+    for (const form of document.getElementsByClassName('answer-form')) {
         const timeString = goodTime(parseInt(form.getAttribute('time')))
         form.innerHTML = `<p>${timeString}</p>` + form.innerHTML
     }

@@ -2,8 +2,14 @@
 
 {{#*inline 'body'}}
 <body>
-    <header>
-        <h1 id='site-header'>Sventi's Corner</h1>
+    <header id='site-header'>
+        <h1 id='logo'>Sventi's Corner</h1>
+        <nav id='site-nav'>
+            <ul>
+                <li><a href='/questions'>Questions</a></li>
+                <li><a href='/music'>Music</a></li>
+            </ul>
+        </nav>
     </header>
     {{#> main }}{{/main}}
     <img id='pigeon' src='/images/pigeon.png' />
