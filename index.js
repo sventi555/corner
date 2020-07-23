@@ -7,6 +7,7 @@ const logger = require('./src/logger');
 const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
 const homeRoute = require('./src/routes/home');
+const notesRoutes = require('./src/routes/notes');
 const notFoundRoute = require('./src/routes/not-found');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
@@ -35,6 +36,7 @@ const questionsRoutes = require('./src/routes/questions');
 
     homeRoute(app);
     musicRoutes(app);
+    notesRoutes(app);
     questionsRoutes(app);
 
     app.use(errorMiddleware());

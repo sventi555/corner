@@ -27,8 +27,8 @@
 {{> goodTime }}
 <script>
     for (const form of document.getElementsByClassName('answer-form')) {
-        const timeString = goodTime(parseInt(form.getAttribute('time')))
-        form.innerHTML = `<p>${timeString}</p>` + form.innerHTML
+        const timeString = goodTime(parseInt(form.getAttribute('time')));
+        form.innerHTML = `<p>${timeString}</p>` + form.innerHTML;
     }
 
     function answerQuestion(event) {

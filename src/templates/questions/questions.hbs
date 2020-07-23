@@ -19,8 +19,8 @@
     <ul id='questions' style='padding-left:1em'>
     {{#each questions}}
         <li id={{this._id}} time='{{this.timestamp}}'>
-            <h3 class='question'>{{this.question}}</h3>
-            <p class='answer'>&nbsp&nbsp&nbsp&nbsp{{{this.answer}}}</p>
+            <p class='question'>{{this.question}}</p>
+            <p class='answer'>&nbsp&nbsp&nbsp{{{this.answer}}}</p>
         </li>
     {{/each}}
     </ul>
@@ -34,8 +34,8 @@
 {{> goodTime }}
 <script>
     for (const question of document.getElementById('questions').getElementsByTagName('li')) {
-        const timeString = goodTime(parseInt(question.getAttribute('time')))
-        question.innerHTML = timeString + ' - ' + question.innerHTML
+        const timeString = goodTime(parseInt(question.getAttribute('time')));
+        question.innerHTML = timeString + ' - ' + question.innerHTML;
     }
 
     let submittedEmpty = false;

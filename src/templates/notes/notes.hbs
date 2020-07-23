@@ -1,0 +1,34 @@
+{{> default title='Notes'}}
+
+{{#*inline 'styles'}}
+<link rel='stylesheet' href='/styles/notes.css?v={{getLaunchTime}}' />
+{{/inline}}
+
+{{#*inline 'main'}}
+<main>
+    {{#unless pageNum}}
+    <h1 id='title'>Notes</h1>
+    {{/unless}}
+    {{#if pageNum}}
+    <a href='/notes?page={{add pageNum -1}}'>Previous notes</a>
+    {{/if}}
+    <ul id='notes'>
+        {{#each notes}}
+        <li class='note' time='{{this.timestamp}}'><p class='note-content'>{{this.note}}</p></li>
+        {{/each}}
+    </ul>
+    {{#unless isLastPage}}
+    <a href='/notes?page={{add pageNum 1}}'>More notes</a>
+    {{/unless}}
+</main>
+{{/inline}}
+
+{{#*inline 'scripts'}}
+{{> goodTime }}
+<script>
+    for (const note of document.getElementsByClassName('note')) {
+        const timeString = goodTime(parseInt(note.getAttribute('time')));
+        note.innerHTML = `${timeString}` + note.innerHTML;
+    }
+</script>
+{{/inline}}
