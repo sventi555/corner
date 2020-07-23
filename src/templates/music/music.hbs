@@ -1,12 +1,17 @@
 {{> default title='Music'}}
 
 {{#*inline 'styles'}}
-<link rel='stylesheet' href='/styles/music.css?v=1' />
+<link rel='stylesheet' href='/styles/music.css?v=2' />
 {{/inline}}
 
 {{#*inline 'main'}}
 <main>
+    {{#unless pageNum}}
     <h1 id='title'>Musics</h1>
+    {{/unless}}
+    {{#if pageNum}}
+    <a href='/music?page={{add pageNum -1}}'>Previous musics</a>
+    {{/if}}
     <ul id='songs'>
         {{#each songs}}
         <div class='song-wrapper' time='{{this.timestamp}}'>
@@ -19,6 +24,9 @@
         </div>
         {{/each}}
     </ul>
+    {{#unless isLastPage}}
+    <a href='/music?page={{add pageNum 1}}'>More musics</a>
+    {{/unless}}
 </main>
 {{/inline}}
 

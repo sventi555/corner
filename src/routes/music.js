@@ -3,14 +3,17 @@ const multer = require('multer');
 
 const {getClient} = require('../db');
 const {makeHbTemplate} = require('../hbUtils');
+const {validate, joi} = require('../middlewares/validation');
 
 const {CORNER_PASSWORD} = process.env;
 
 function musicRoutes(app) {
+    const PAGE_SIZE = 50;
+
     const musicTemplate = makeHbTemplate(__dirname, '../templates/music/music.hbs');
     const musicUpload = multer({dest: 'media/music'});
 
-    app.get('/music', async (req, res, next) => {
+    app.get('/music', validate({query: joi.object({page: joi.number().integer().min(0)})}), async (req, res, next) => {
         let client;
         try {
             client = await getClient();
@@ -18,10 +21,22 @@ function musicRoutes(app) {
             return next(err);
         }
 
-        try {
-            const songs = await client.db('corner').collection('songs').find().sort('timestamp', -1).limit(100).toArray();
+        const pageNum = req.query.page ? parseInt(req.query.page) : 0;
 
-            res.send(musicTemplate({songs}));
+        try {
+            const songs = await client.db('corner').collection('songs').find({}).sort('timestamp', -1).skip(PAGE_SIZE * pageNum).limit(PAGE_SIZE).toArray();
+
+            // if (songs.length === 0) return next();
+
+            let isLastPage = false;
+            if (songs.length < PAGE_SIZE) {
+                isLastPage = true;
+            } else {
+                const nextPageSongs = await client.db('corner').collection('songs').find({}).sort('timestamp', -1).skip(PAGE_SIZE * (pageNum + 1)).limit(1).toArray();
+                if (nextPageSongs.length == 0) isLastPage = true;
+            }
+
+            res.send(musicTemplate({songs, pageNum, isLastPage}));
             return next();
         } catch (err) {
             return next(err);
