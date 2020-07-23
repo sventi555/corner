@@ -47,10 +47,12 @@ ul {
 }
 
 #logo {
-    font-size: 4em;
     font-family: Hamma;
+    font-size: 4em;
+    font-weight: bold;
     letter-spacing: 0.02em;
     padding-bottom: 0;
+    text-decoration: none;
 }
 
 #site-nav ul {
