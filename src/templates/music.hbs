@@ -11,10 +11,10 @@
         {{#each songs}}
         <div class='song-wrapper' time='{{this.timestamp}}'>
             {{#unless this.isVideo}}
-            <audio controls src='{{this.filename}}'>Your browser is sad.</audio>
+            <audio controls src='/music/{{this.filename}}'>Your browser is sad.</audio>
             {{/unless}}
             {{#if this.isVideo}}
-            <video controls src='{{this.filename}}' width='300'>Your browser is sad.</video>
+            <video controls src='/music/{{this.filename}}' width='300'>Your browser is sad.</video>
             {{/if}}
         </div>
         {{/each}}
