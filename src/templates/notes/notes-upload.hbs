@@ -1,0 +1,28 @@
+{{> default title='Upload Notes'}}
+
+{{#*inline 'main'}}
+<main>
+    <form action='/api/notes' method='post' onsubmit='return validateForm(event)'>
+        <textarea id='note' name='note' rows='4' cols='35'></textarea></br>
+        <input class='submit' type='submit' value='Submit'/>
+    </form>
+</main>
+{{/inline}}
+
+{{#*inline 'scripts'}}
+<script>
+    let submittedEmpty = false;
+    function validateForm(event) {
+        const note = document.getElementById('note');
+        if (note.value.trim() === '') {
+            if (!submittedEmpty) {
+                submittedEmpty = true;
+                const main = document.getElementsByTagName('main')[0];
+                main.innerHTML += '<p style=\'color:red\'>Cannot upload empty note</p>';
+            }
+            return false;
+        }
+        return true;
+    }
+</script>
+{{/inline}}

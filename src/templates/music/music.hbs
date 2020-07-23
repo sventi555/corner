@@ -34,8 +34,8 @@
 {{> goodTime }}
 <script>
     for (const song of document.getElementsByClassName('song-wrapper')) {
-        const timeString = goodTime(parseInt(song.getAttribute('time')))
-        song.innerHTML = `<p>${timeString}</p>` + song.innerHTML
+        const timeString = goodTime(parseInt(song.getAttribute('time')));
+        song.innerHTML = `<p>${timeString}</p>` + song.innerHTML;
     }
 </script>
 {{/inline}}

@@ -1,0 +1,17 @@
+#notes {
+    margin: 0 1em;
+}
+
+.note {
+    padding: 1em 0;
+    width: 85vw;
+}
+
+.note:not(:last-child) {
+    border-bottom: 0.1em solid var(--bg-secondary-colour);
+}
+
+.note-content {
+    font-size: 1.4em;
+    margin-top: 0.2em;
+}
