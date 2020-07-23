@@ -6,6 +6,7 @@ const initHb = require('./src/initHb');
 const logger = require('./src/logger');
 const {errorMiddleware} = require('./src/middlewares/error');
 const {loggingMiddleware} = require('./src/middlewares/logging');
+const homeRoute = require('./src/routes/home');
 const notFoundRoute = require('./src/routes/not-found');
 const musicRoutes = require('./src/routes/music');
 const questionsRoutes = require('./src/routes/questions');
@@ -32,6 +33,7 @@ const questionsRoutes = require('./src/routes/questions');
 
     initHb();
 
+    homeRoute(app);
     musicRoutes(app);
     questionsRoutes(app);
 

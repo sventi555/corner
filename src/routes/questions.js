@@ -11,8 +11,8 @@ const {CORNER_PASSWORD} = process.env;
 function questionsRoutes(app) {
     const PAGE_SIZE = 100;
 
-    const questionTemplate = makeHbTemplate(__dirname, '../templates/question.hbs');
-    const questionsTemplate = makeHbTemplate(__dirname, '../templates/questions.hbs');
+    const questionTemplate = makeHbTemplate(__dirname, '../templates/questions/question.hbs');
+    const questionsTemplate = makeHbTemplate(__dirname, '../templates/questions/questions.hbs');
     app.get('/questions/:id?',
         validate({
             query: joi.object({
@@ -122,7 +122,7 @@ function questionsRoutes(app) {
         }
     });
 
-    const answerTemplate = makeHbTemplate(__dirname, '../templates/questions-answer.hbs');
+    const answerTemplate = makeHbTemplate(__dirname, '../templates/questions/questions-answer.hbs');
     app.get('/questions-answer', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
         let client;
         try {
@@ -143,7 +143,7 @@ function questionsRoutes(app) {
         }
     });
 
-    const thanksPage = makeHbTemplate(__dirname, '../templates/questions-thanks.hbs');
+    const thanksPage = makeHbTemplate(__dirname, '../templates/questions/questions-thanks.hbs');
     app.get('/questions-thanks', (req, res, next) => {
         res.send(thanksPage({}));
         return next();

@@ -7,7 +7,7 @@ const {makeHbTemplate} = require('../hbUtils');
 const {CORNER_PASSWORD} = process.env;
 
 function musicRoutes(app) {
-    const musicTemplate = makeHbTemplate(__dirname, '../templates/music.hbs');
+    const musicTemplate = makeHbTemplate(__dirname, '../templates/music/music.hbs');
     const musicUpload = multer({dest: 'media/music'});
 
     app.get('/music', async (req, res, next) => {
@@ -30,7 +30,7 @@ function musicRoutes(app) {
         }
     });
 
-    const uploadTemplate = makeHbTemplate(__dirname, '../templates/music-upload.hbs');
+    const uploadTemplate = makeHbTemplate(__dirname, '../templates/music/music-upload.hbs');
     app.get('/music-upload', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
         res.send(uploadTemplate({}));
         return next();
