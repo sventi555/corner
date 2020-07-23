@@ -66,7 +66,7 @@ function questionsRoutes(app) {
                 if (questions.length < PAGE_SIZE) {
                     isLastPage = true;
                 } else {
-                    const nextPageQuestions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).skip(PAGE_SIZE * (pageNum + 1)).limit(PAGE_SIZE).toArray();
+                    const nextPageQuestions = await client.db('corner').collection('questions').find(dbQuery).sort('timestamp', -1).skip(PAGE_SIZE * (pageNum + 1)).limit(1).toArray();
                     if (nextPageQuestions.length == 0) isLastPage = true;
                 }
 
