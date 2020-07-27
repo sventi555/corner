@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/proxy-body-size: 250M
   name: corner
   namespace: corner
 spec:
@@ -49,7 +50,7 @@ spec:
     spec:
       containers:
       - name: corner
-        image: docker.pkg.github.com/sventi555/corner/corner:1.0.8-alpha
+        image: docker.pkg.github.com/sventi555/corner/corner:1.0.1
         env:
         - name: NODE_ENV
           value: production
