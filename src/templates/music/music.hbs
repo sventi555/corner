@@ -14,7 +14,7 @@
     {{/if}}
     <ul id='songs'>
         {{#each songs}}
-        <div class='song-wrapper' time='{{this.timestamp}}'>
+        <div id='{{this._id}}' class='song-wrapper' time='{{this.timestamp}}'>
             {{#unless this.isVideo}}
             <audio controls src='/music/{{this.filename}}'>Your browser is sad.</audio>
             {{/unless}}

@@ -1,11 +1,10 @@
-const basicAuth = require('express-basic-auth');
+const {ObjectID} = require('mongodb');
 const multer = require('multer');
 
 const {getClient} = require('../db');
 const {makeHbTemplate} = require('../hbUtils');
+const authMiddleware = require('../middlewares/basic-auth');
 const {validate, joi} = require('../middlewares/validation');
-
-const {CORNER_PASSWORD} = process.env;
 
 function musicRoutes(app) {
     const PAGE_SIZE = 50;
@@ -26,7 +25,7 @@ function musicRoutes(app) {
         try {
             const songs = await client.db('corner').collection('songs').find({}).sort('timestamp', -1).skip(PAGE_SIZE * pageNum).limit(PAGE_SIZE).toArray();
 
-            // if (songs.length === 0) return next();
+            if (songs.length === 0) return next();
 
             let isLastPage = false;
             if (songs.length < PAGE_SIZE) {
@@ -46,12 +45,12 @@ function musicRoutes(app) {
     });
 
     const uploadTemplate = makeHbTemplate(__dirname, '../templates/music/music-upload.hbs');
-    app.get('/music-upload', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), async (req, res, next) => {
+    app.get('/music-upload', authMiddleware(), async (req, res, next) => {
         res.send(uploadTemplate({}));
         return next();
     });
 
-    app.post('/api/music', basicAuth({challenge: true, users:{'admin': CORNER_PASSWORD}}), musicUpload.single('song'), async (req, res, next) => {
+    app.post('/api/music', authMiddleware(), musicUpload.single('song'), async (req, res, next) => {
         const receivedAt = Date.now();
 
         let client;
@@ -78,6 +77,33 @@ function musicRoutes(app) {
             await client.close();
         }
     });
+
+    app.delete('/api/music/:id', authMiddleware(),
+        validate({
+            params: joi.object({
+                id: joi.string().length(24)
+            })
+        }),
+        async (req, res, next) => {
+            let client;
+            try {
+                client = await getClient();
+            } catch (err) {
+                return next(err);
+            }
+
+            try {
+                await client.db('corner').collection('songs').deleteOne({'_id': ObjectID(req.params.id)});
+
+                res.status(204).send();
+                return next();
+            } catch(err) {
+                return next(err);
+            } finally {
+                client.close();
+            }
+        }
+    );
 }
 
 module.exports = musicRoutes;
