@@ -20,7 +20,7 @@
     {{#each questions}}
         <li id={{this._id}} time='{{this.timestamp}}'>
             <p class='question'>{{this.question}}</p>
-            <p class='answer'>&nbsp&nbsp&nbsp{{{this.answer}}}</p>
+            <div class='answer'>{{{this.answer}}}</div>
         </li>
     {{/each}}
     </ul>

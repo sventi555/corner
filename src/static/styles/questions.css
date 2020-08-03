@@ -22,3 +22,11 @@
     font-size: 1.4em;
     margin-bottom: 0.5em;
 }
+
+.answer {
+    margin-left: 1em;
+}
+
+.answer ul, .answer ol {
+    padding-left: 40px;
+}
