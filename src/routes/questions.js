@@ -1,7 +1,7 @@
-const md = require('markdown-it')();
 const {ObjectID} = require('mongodb');
 
 const {getClient} = require('../db');
+const md = require('../md');
 const authMiddleware = require('../middlewares/basic-auth');
 const {validate, joi} = require('../middlewares/validation');
 const {makeHbTemplate} = require('../hbUtils');
