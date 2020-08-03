@@ -14,7 +14,7 @@
     {{/if}}
     <ul id='notes'>
         {{#each notes}}
-        <li id='{{this._id}}' class='note' time='{{this.timestamp}}'><p class='note-content'>{{this.note}}</p></li>
+        <li id='{{this._id}}' class='note' time='{{this.timestamp}}'><p class='note-content'>{{{this.note}}}</p></li>
         {{/each}}
     </ul>
     {{#unless isLastPage}}
