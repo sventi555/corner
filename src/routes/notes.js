@@ -1,3 +1,4 @@
+const md = require('markdown-it')();
 const {ObjectID} = require('mongodb');
 
 const {getClient} = require('../db');
@@ -60,7 +61,7 @@ function notesRoutes(app) {
             const notes = client.db('corner').collection('notes');
             await notes.insertOne({
                 timestamp: receivedAt,
-                note: req.body.note
+                note: md.render(req.body.note)
             });
 
             res.redirect('/notes');

@@ -1,3 +1,4 @@
+const md = require('markdown-it')();
 const {ObjectID} = require('mongodb');
 
 const {getClient} = require('../db');
@@ -135,7 +136,7 @@ function questionsRoutes(app) {
         }
 
         try {
-            await client.db('corner').collection('questions').updateOne({'_id': ObjectID(req.params.id)}, {$set: {'answer': req.body.answer}});
+            await client.db('corner').collection('questions').updateOne({'_id': ObjectID(req.params.id)}, {$set: {'answer': md.render(req.body.answer)}});
 
             res.sendStatus(200);
             return next();
