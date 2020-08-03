@@ -1,17 +1,34 @@
 name: Auto-Release
+
 on:
   release:
     types: [published]
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+      - 'index.js'
+      - 'package.json'
+      - 'yarn.lock'
+
   push:
     branches:
       - master
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+      - 'index.js'
+      - 'package.json'
+      - 'yarn.lock'
+
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
+
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
@@ -20,11 +37,13 @@ jobs:
           registry: docker.pkg.github.com
           repository: sventi555/corner/corner
           tag_with_ref: true
+
   update_cluster:
+    name: Update image version on StatefulSet and wait for completion
     if: github.event_name == 'release'
     needs: [push_to_registry]
-    name: Update k8s cluster to use release version
     runs-on: ubuntu-latest
+
     steps:
     - name: Save DigitalOcean Kubernetes Config
       uses: matootie/dokube@v1.3.1
@@ -32,11 +51,13 @@ jobs:
         personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         clusterName: sventis-cluster
         namespace: corner
+
     - name: Get version
       id: gv
       run: echo "::set-output name=version::${GITHUB_REF##*/}"
+
     - name: Update StatefulSet
       run: kubectl set image statefulset.apps/corner corner=docker.pkg.github.com/sventi555/corner/corner:${{ steps.gv.outputs.version }}
+
     - name: Wait for StatefulSet
       run: kubectl rollout status statefulset/corner -w
-
