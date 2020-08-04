@@ -5,6 +5,7 @@ on:
     types: [published]
     paths:
       - 'src/**'
+      - '.dockerignore'
       - 'Dockerfile'
       - 'index.js'
       - 'package.json'
@@ -15,6 +16,7 @@ on:
       - master
     paths:
       - 'src/**'
+      - '.dockerignore'
       - 'Dockerfile'
       - 'index.js'
       - 'package.json'
