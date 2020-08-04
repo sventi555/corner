@@ -4,23 +4,23 @@ on:
   release:
     types: [published]
     paths:
-      - 'src/**'
-      - '.dockerignore'
-      - 'Dockerfile'
-      - 'index.js'
-      - 'package.json'
-      - 'yarn.lock'
+    - 'src/**'
+    - '.dockerignore'
+    - 'Dockerfile'
+    - 'index.js'
+    - 'package.json'
+    - 'yarn.lock'
 
   push:
     branches:
-      - master
+    - master
     paths:
-      - 'src/**'
-      - '.dockerignore'
-      - 'Dockerfile'
-      - 'index.js'
-      - 'package.json'
-      - 'yarn.lock'
+    - 'src/**'
+    - '.dockerignore'
+    - 'Dockerfile'
+    - 'index.js'
+    - 'package.json'
+    - 'yarn.lock'
 
 jobs:
   push_to_registry:
@@ -28,17 +28,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
+    - name: Check out the repo
+      uses: actions/checkout@v2
 
-      - name: Push to GitHub Packages
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          repository: sventi555/corner/corner
-          tag_with_ref: true
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: sventi555/corner/corner
+        tag_with_ref: true
 
   update_cluster:
     name: Update image version on StatefulSet and wait for completion
