@@ -9,9 +9,15 @@ const {validate, joi} = require('../middlewares/validation');
 function musicRoutes(app) {
     const PAGE_SIZE = 50;
 
-    const musicTemplate = makeHbTemplate(__dirname, '../templates/music/music.hbs');
-    const musicUpload = multer({dest: 'media/music'});
+    const storage = multer.diskStorage({
+        destination: 'media/music',
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + '-' + file.originalname.replace(' ', '-'));
+        }
+    });
+    const musicUpload = multer({storage});
 
+    const musicTemplate = makeHbTemplate(__dirname, '../templates/music/music.hbs');
     app.get('/music', validate({query: joi.object({page: joi.number().integer().min(0)})}), async (req, res, next) => {
         let client;
         try {
