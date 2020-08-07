@@ -1,8 +1,12 @@
+const fs = require('fs');
+const path = require('path');
+
 const {ObjectID} = require('mongodb');
 const multer = require('multer');
 
 const {getClient} = require('../db');
 const {makeHbTemplate} = require('../hbUtils');
+const logger = require('../logger');
 const authMiddleware = require('../middlewares/basic-auth');
 const {validate, joi} = require('../middlewares/validation');
 
@@ -99,6 +103,18 @@ function musicRoutes(app) {
             }
 
             try {
+                const song = await client.db('corner').collection('songs').findOne({'_id': ObjectID(req.params.id)});
+                if (!song) {
+                    res.status(204).send();
+                    return next();
+                }
+
+                try {
+                    fs.unlinkSync(path.join(__dirname, '../../media/music/', song.filename));
+                } catch (err) {
+                    logger.error(err);
+                }
+
                 await client.db('corner').collection('songs').deleteOne({'_id': ObjectID(req.params.id)});
 
                 res.status(204).send();
