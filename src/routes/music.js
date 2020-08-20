@@ -16,7 +16,7 @@ function musicRoutes(app) {
     const storage = multer.diskStorage({
         destination: 'media/music',
         filename: (req, file, cb) => {
-            cb(null, Date.now() + '-' + file.originalname.replace(' ', '-'));
+            cb(null, Date.now() + '-' + file.originalname.replace(/ /g, '-'));
         }
     });
     const musicUpload = multer({storage});
