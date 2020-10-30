@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
       - name: corner
-        image: docker.pkg.github.com/sventi555/corner/corner:1.0.1
+        image: docker.pkg.github.com/sventi555/corner/corner:1.0.4
         env:
         - name: NODE_ENV
           value: production
@@ -63,13 +63,6 @@ spec:
               key: password
         ports:
         - containerPort: 3000
-        resources:
-          limits:
-            memory: 500Mi
-            cpu: 400m
-          requests:
-            memory: 500Mi
-            cpu: 200m  
         volumeMounts:
         - name: corner-media
           mountPath: /usr/src/app/media
